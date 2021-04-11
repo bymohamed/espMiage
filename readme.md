@@ -8,8 +8,7 @@ Le projet «**Lucioles Temperatures Management System**» vise à construire des
 
 Grand merci à l'architecte Ahmed Ksiksi pour le refait du plan du bâtiment.
 
-<iframe width="100%" height="600" src="https://www.docdroid.net/IIBBpGt/beny-pdf" frameborder="0" allowtransparency allowfullscreen></iframe>
-
+![plan](https://filebin.net/yxde4wfyn9o3ymum/BENY_00001.svg?t=hsee8o17)
 ## Pour commencer
 
 Pour télécharger il suffit de lancer cette commande dans votre terminal
