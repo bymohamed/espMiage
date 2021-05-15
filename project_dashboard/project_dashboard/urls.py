@@ -10,5 +10,7 @@ urlpatterns = [
     path('datarecup/', mainViews.datarecup, name="datarecup"),
     path('login/', mainViews.viewlogin, name="login"),
     path('tables/', mainViews.tables, name="tables"),
+    path('createSalle/', mainViews.CreateSalle, name="CreateSalle"),
+
 
 ]

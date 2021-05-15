@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from .models import *
+from django.db import connection
 
 # Create your views here.
 def viewlogin(request):
@@ -22,11 +23,33 @@ def dashboard(request):
     # text = ""
     # for temp in alltemps:
     #     text += "|"+temp.datetime.strftime("%d-%b-%Y (%H:%M:%S.%f)")+"|"+str(temp.valeur)+"|"+str(temp.who)+"<br>"
+
+
     context = {}
-    context['temps'] = Temperature.objects.all()
+    cursor = connection.cursor()
+    try:
+        cursor.execute('''SELECT max("main_temperature"."datetime") as maxDate, "main_classenum"."num", "main_esp"."mac", "main_temperature"."valeur" FROM "main_classenum" JOIN "main_salledeclasse" ON ("main_classenum"."num" = "main_salledeclasse"."numeroDeSalle_id") INNER JOIN "main_esp" ON ("main_salledeclasse"."esp_id" = "main_esp"."mac") INNER JOIN "main_temperature" ON ("main_esp"."mac" = "main_temperature"."who_id") group by "mac"''')
+    except:
+        print("pas encore intisialisé  ")
+    context['valeurs'] = cursor.fetchall()
+
+    if request.method == 'POST':
+        form = SalleForm(request.POST)
+        if form.is_valid():
+            # save the model to database, directly from the form:
+            my_model = form.save()  # reference to my_model is often not needed at all, a simple form.save() is ok
+            # alternatively:
+            # my_model = form.save(commit=False)  # create model, but don't save to database
+            # my.model.something = whatever  # if I need to do something before saving it
+            # my.model.save()
+    else:        
+        form = SalleForm()
+    context['form'] = form
+
 
     return render(request,"dashboard.html",context)
 
+@login_required
 def datarecup(request):
     temperature = request.GET.get("temp")
     print(temperature)
@@ -37,7 +60,25 @@ def datarecup(request):
     print(Temperature.objects.all())
     return HttpResponse("waiting for data")
 
+@login_required
 def tables(request):
     context = {}
     context['temps'] = Temperature.objects.all()
     return render(request, "tables.html", context)
+
+
+@login_required
+def CreateSalle(request):
+    if request.method == 'POST':
+        form = SalleForm(request.POST)
+        if form.is_valid():
+            # save the model to database, directly from the form:
+            my_model = form.save()  # reference to my_model is often not needed at all, a simple form.save() is ok
+            # alternatively:
+            # my_model = form.save(commit=False)  # create model, but don't save to database
+            # my.model.something = whatever  # if I need to do something before saving it
+            # my.model.save()
+    else:        
+        form = SalleForm()
+    context_data = {'form': form}
+    return render(request, 'createsalle.html', context_data)
