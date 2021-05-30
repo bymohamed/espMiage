@@ -7,10 +7,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
     path('', mainViews.dashboard, name="dashboard"),
-    path('datarecup/', mainViews.datarecup, name="datarecup"),
     path('login/', mainViews.viewlogin, name="login"),
     path('tables/', mainViews.tables, name="tables"),
-    path('createSalle/', mainViews.CreateSalle, name="CreateSalle"),
+    path('charts/', mainViews.charts, name="charts"),
+    path('charts/<int:id>', mainViews.charts, name="charts"),
 
 
 ]

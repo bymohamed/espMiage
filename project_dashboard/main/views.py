@@ -46,19 +46,8 @@ def dashboard(request):
         form = SalleForm()
     context['form'] = form
 
-
     return render(request,"dashboard.html",context)
 
-@login_required
-def datarecup(request):
-    temperature = request.GET.get("temp")
-    print(temperature)
-    machine = request.GET.get("machine")
-    print(machine)
-    new = Temperature(valeur=float(temperature), idmachine=int(machine))
-    new.save()
-    print(Temperature.objects.all())
-    return HttpResponse("waiting for data")
 
 @login_required
 def tables(request):
@@ -68,17 +57,5 @@ def tables(request):
 
 
 @login_required
-def CreateSalle(request):
-    if request.method == 'POST':
-        form = SalleForm(request.POST)
-        if form.is_valid():
-            # save the model to database, directly from the form:
-            my_model = form.save()  # reference to my_model is often not needed at all, a simple form.save() is ok
-            # alternatively:
-            # my_model = form.save(commit=False)  # create model, but don't save to database
-            # my.model.something = whatever  # if I need to do something before saving it
-            # my.model.save()
-    else:        
-        form = SalleForm()
-    context_data = {'form': form}
-    return render(request, 'createsalle.html', context_data)
+def charts(request, oid = None):
+    return render(request, "charts.html")
